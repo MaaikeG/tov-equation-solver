@@ -1,29 +1,41 @@
-import initial_conditions
 import integrator as int
 import constants as c
 import plotting
 
 
-def run():
-    cond = initial_conditions.initial_conditions()
+def update_rho(args, diff):
+    args.rho_0 += diff * args.rho_0
 
-    tolerance = 0.01
-    diff = tolerance + 1
+
+def get_diff(mass_goal, mass_real):
+    diff = mass_goal - mass_real
+
+    if diff > 0:
+        diff /= mass_goal
+    else:
+        diff /= mass_real
+    return diff
+
+
+def run(args):
+    # fractional difference between calculated mass and goal mass. Initialize high enough so that while loop will start.
+    diff = args.tolerance + 1
 
     i = 0
-    while abs(diff) > tolerance:
-        integrator = int.integrator(cond)
+    while abs(diff) > args.tolerance:
 
-        mass = integrator.integrate()
+        # Instantiate new integrator which sets the initial rho and P
+        integrator = int.integrator(args)
 
-        diff = c.goal_mass - mass
-        if diff > 0:
-            diff /= c.goal_mass
-        else:
-            diff /= mass
-        cond.change_rho_0(diff)
+        # run the solver. Get mass of neutron star based on arguments and initial conditions
+        mass = integrator.integrate(args)
 
-        print('{}: rho={}, mass = {} M_sol'.format(i, cond.rho, mass/c.solar_mass))
+        diff = get_diff(args.goal_mass, mass)
+
+        # update the initial conditions based on the mass difference
+        update_rho(args, diff)
+
+        print('{}: rho={}, mass = {} M_sol'.format(i, args.rho_0, mass/c.SOLAR_MASS))
 
         i+=1
 

@@ -4,10 +4,9 @@ import constants as c
 dr = 100
 
 class integrator():
-    def __init__(self, conditions):
-        self.rho_0 = conditions.get_rho_0()
-        # initial pressure given by equation of state, depends on density
-        self.P_0 = conditions.get_P_0()
+    def __init__(self, args):
+        self.rho_0 = args.rho_0
+        self.P_0 = args.K * self.rho_0 ** args.gamma
 
         # start at center (r=0) with zero mass
         self.total_mass = 0
@@ -19,7 +18,7 @@ class integrator():
         self.densities = []
 
 
-    def integrate(self):
+    def integrate(self, args):
 
         # initialize the variables
         P = self.P_0
@@ -29,7 +28,7 @@ class integrator():
         i=0
 
         # loop until pressure == 0 meaning we have reached the total radius of the star
-        while P > 0 and i < c.max_iterations:
+        while P > 0 and i < args.max_iterations:
             r += dr
 
             self.densities.append(rho)
@@ -37,7 +36,7 @@ class integrator():
             self.pressures.append(P)
 
             # calculate rho based on P
-            rho = (P / c.K) ** (1 / c.gamma)
+            rho = (P / args.K) ** (1 / args.gamma)
 
             # increase mass based on new pressure, density and new radius
             self.total_mass += (4/3) * np.pi * (r**3 - (r-dr)** 3) * rho
