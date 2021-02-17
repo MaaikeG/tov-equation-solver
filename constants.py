@@ -1,7 +1,5 @@
-
-
 # ---------------------------------------
-# constants in SI units
+# constants are in SI units
 # ---------------------------------------
 
 # gravitational constant
@@ -14,7 +12,7 @@ SOLAR_MASS = 1.98855e30
 NUCLEAR_DENSITY = 2.3e17
 
 # speed of light
-c = 299792458
+C = 299792458
 
 # pre-calculate c squared for speed
-c2 = c**2
+C2 = C**2
