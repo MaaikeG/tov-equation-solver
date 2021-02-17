@@ -43,8 +43,8 @@ class integrator():
 
             # calculate new P based on previous mass/density
             P = self.step(P, r, rho)
+
             i+=1
-        print(i)
         return self.total_mass
 
 

@@ -35,7 +35,7 @@ def run(args):
         # update the initial conditions based on the mass difference
         update_rho(args, diff)
 
-        print('{}: rho={}, mass = {} M_sol'.format(i, args.rho_0, mass/c.SOLAR_MASS))
+        print('iteration {}: rho={}, mass = {} M_sol'.format(i, args.rho_0, mass/c.SOLAR_MASS))
 
         i+=1
 
